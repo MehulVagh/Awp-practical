@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+        .main-container {
+            display: flex;
+            gap: 20px;
+            width: 90%;
+            max-width: 1200px;
+            justify-content: space-between; /* Ensures the form and data sections are spaced out */
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 48%; /* Adjust the width of the form */
+        }
+        label {
+            display: block;
+            text-align: left;
+            margin: 5px 0;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .password-box {
+            position: relative;
+        }
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+        .gender-container {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .gender-container label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+        button {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background: linear-gradient(135deg, #0072ff, #00c6ff);
+        }
+        .output-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            width: 48%; /* Adjust the width of the output container */
+        }
+        .output-container p {
+            margin: 10px 0;
+        }
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .container, .output-container {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="container">
+            <h2>Registration Form</h2>
+            <form id="registrationForm" onsubmit="return validateForm()">
+                <label for="name">Name</label>
+                <input type="text" id="name" required>
+                
+                <label for="enrollment">Enrollment</label>
+                <input type="text" id="enrollment" required>
+                
+                <label for="email">Email</label>
+                <input type="email" id="email" required>
+                
+                <label for="subject">Subject</label>
+                <select id="subject">
+                    <option value="Math">Math</option>
+                    <option value="Science">Science</option>
+                    <option value="English">English</option>
+                </select>
+                
+                <label>Gender</label>
+                <div class="gender-container">
+                    <label><input type="radio" name="gender" value="Male" id="male"> Male</label>
+                    <label><input type="radio" name="gender" value="Female" id="female"> Female</label>
+                </div>
+                
+                <label for="department">Department</label>
+                <select id="department">
+                    <option value="CS">Computer Science</option>
+                    <option value="EE">Electrical Engineering</option>
+                    <option value="ME">Mechanical Engineering</option>
+                </select>
+                
+                <label for="phone">Mobile No</label>
+                <input type="tel" id="phone" required>
+                
+                <label for="password">Password</label>
+                <div class="password-box">
+                    <input type="password" id="password" required>
+                    <span class="toggle-password" onclick="togglePassword()">👁️</span>
+                </div>
+                
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+        <div class="output-container">
+            <h2>Form Data</h2>
+            <p><strong>Name:</strong> <span id="output-name"></span></p>
+            <p><strong>Enrollment:</strong> <span id="output-enrollment"></span></p>
+            <p><strong>Email:</strong> <span id="output-email"></span></p>
+            <p><strong>Subject:</strong> <span id="output-subject"></span></p>
+            <p><strong>Gender:</strong> <span id="output-gender"></span></p>
+            <p><strong>Department:</strong> <span id="output-department"></span></p>
+            <p><strong>Mobile No:</strong> <span id="output-phone"></span></p>
+        </div>
+    </div>
+    <script>
+        function togglePassword() {
+            var passwordField = document.getElementById("password");
+            passwordField.type = passwordField.type === "password" ? "text" : "password";
+        }
+        
+        function validateForm() {
+            var phone = document.getElementById("phone").value;
+            var password = document.getElementById("password").value;
+            var phonePattern = /^[0-9]{10}$/;
+            var passwordPattern = /^(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+            
+            if (!phonePattern.test(phone)) {
+                alert("Please enter a valid 10-digit mobile number.");
+                return false;
+            }
+            if (!passwordPattern.test(password)) {
+                alert("Password must be at least 8 characters long, contain a number, and a special character.");
+                return false;
+            }
+
+            // Displaying the submitted data
+            document.getElementById("output-name").textContent = document.getElementById("name").value;
+            document.getElementById("output-enrollment").textContent = document.getElementById("enrollment").value;
+            document.getElementById("output-email").textContent = document.getElementById("email").value;
+            document.getElementById("output-subject").textContent = document.getElementById("subject").value;
+            document.getElementById("output-gender").textContent = document.querySelector('input[name="gender"]:checked') ? document.querySelector('input[name="gender"]:checked').value : 'Not Selected';
+            document.getElementById("output-department").textContent = document.getElementById("department").value;
+            document.getElementById("output-phone").textContent = document.getElementById("phone").value;
+
+            return false; // Prevents form submission for demonstration
+        }
+    </script>
+</body>
+</html>

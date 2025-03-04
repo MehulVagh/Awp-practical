@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="registrationApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AngularJS Registration Form</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+        .main-container {
+            display: flex;
+            gap: 20px;
+            width: 90%;
+            max-width: 1200px;
+            justify-content: space-between;
+        }
+        .container, .output-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            width: 48%;
+        }
+        label {
+            display: block;
+            text-align: left;
+            margin: 5px 0;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .password-box {
+            position: relative;
+        }
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+        .gender-container {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .gender-container label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+        button {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background: linear-gradient(135deg, #0072ff, #00c6ff);
+        }
+        .output-container p {
+            margin: 10px 0;
+        }
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .container, .output-container {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body ng-controller="FormController">
+    <div class="main-container">
+        <div class="container">
+            <h2>Registration Form</h2>
+            <form name="registrationForm">
+                <label for="name">Name</label>
+                <input type="text" id="name" ng-model="user.name" required>
+                
+                <label for="enrollment">Enrollment</label>
+                <input type="text" id="enrollment" ng-model="user.enrollment" required>
+                
+                <label for="email">Email</label>
+                <input type="email" id="email" ng-model="user.email" required>
+                
+                <label for="subject">Subject</label>
+                <select id="subject" ng-model="user.subject">
+                    <option value="Math">Math</option>
+                    <option value="Science">Science</option>
+                    <option value="English">English</option>
+                </select>
+                
+                <label>Gender</label>
+                <div class="gender-container">
+                    <label><input type="radio" name="gender" value="Male" ng-model="user.gender"> Male</label>
+                    <label><input type="radio" name="gender" value="Female" ng-model="user.gender"> Female</label>
+                </div>
+                
+                <label for="department">Department</label>
+                <select id="department" ng-model="user.department">
+                    <option value="CS">Computer Science</option>
+                    <option value="EE">Electrical Engineering</option>
+                    <option value="ME">Mechanical Engineering</option>
+                </select>
+                
+                <label for="phone">Mobile No</label>
+                <input type="tel" id="phone" ng-model="user.phone" required>
+                
+                <label for="password">Password</label>
+                <div class="password-box">
+                    <input type="{{passwordType}}" id="password" ng-model="user.password" required>
+                    <span class="toggle-password" ng-click="togglePassword()">👁️</span>
+                </div>
+                
+                <button type="submit" ng-click="validateForm()">Submit</button>
+            </form>
+        </div>
+        
+        <div class="output-container">
+            <h2>Form Data</h2>
+            <p><strong>Name:</strong> {{ user.name || 'Not provided' }}</p>
+            <p><strong>Enrollment:</strong> {{ user.enrollment || 'Not provided' }}</p>
+            <p><strong>Email:</strong> {{ user.email || 'Not provided' }}</p>
+            <p><strong>Subject:</strong> {{ user.subject || 'Not selected' }}</p>
+            <p><strong>Gender:</strong> {{ user.gender || 'Not selected' }}</p>
+            <p><strong>Department:</strong> {{ user.department || 'Not selected' }}</p>
+            <p><strong>Mobile No:</strong> {{ user.phone || 'Not provided' }}</p>
+        </div>
+    </div>
+
+    <script>
+        var app = angular.module('registrationApp', []);
+
+        app.controller('FormController', function($scope) {
+            $scope.user = {};
+            $scope.passwordType = "password";
+
+            $scope.togglePassword = function() {
+                $scope.passwordType = $scope.passwordType === "password" ? "text" : "password";
+            };
+
+            $scope.validateForm = function() {
+                var phonePattern = /^[0-9]{10}$/;
+                var passwordPattern = /^(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+
+                if (!$scope.user.phone || !phonePattern.test($scope.user.phone)) {
+                    alert("Please enter a valid 10-digit mobile number.");
+                    return;
+                }
+                if (!$scope.user.password || !passwordPattern.test($scope.user.password)) {
+                    alert("Password must be at least 8 characters long, contain a number, and a special character.");
+                    return;
+                }
+
+                alert("Form submitted successfully!");
+            };
+        });
+    </script>
+</body>
+</html>
